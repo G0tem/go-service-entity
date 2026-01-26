@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/G0tem/go-servise-entity/internal"
+	"github.com/G0tem/go-service-entity/internal"
 )
 
 func TestUtilsParseDurationCase1(t *testing.T) {

@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/G0tem/go-servise-entity/internal/config"
-	"github.com/G0tem/go-servise-entity/internal/dto"
+	"github.com/G0tem/go-service-entity/internal/config"
+	"github.com/G0tem/go-service-entity/internal/dto"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/rs/zerolog/log"
 )

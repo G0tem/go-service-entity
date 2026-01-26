@@ -9,15 +9,15 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/G0tem/go-servise-entity/internal/config"
-	"github.com/G0tem/go-servise-entity/internal/dto"
+	"github.com/G0tem/go-service-entity/internal/config"
+	"github.com/G0tem/go-service-entity/internal/dto"
 	"github.com/rs/zerolog/log"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 func printLogo() {
-	fmt.Printf("go-servise-entity SERVICE V1.0")
+	fmt.Printf("go-service-entity SERVICE V1.0")
 }
 
 func ListenRabbitQueue(cfg *config.Config) error {

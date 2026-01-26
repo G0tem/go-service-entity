@@ -4,7 +4,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/G0tem/go-servise-entity/internal/types"
+	"github.com/G0tem/go-service-entity/internal/types"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 )

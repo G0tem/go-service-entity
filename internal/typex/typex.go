@@ -5,7 +5,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/G0tem/go-servise-entity/internal/utilx"
+	"github.com/G0tem/go-service-entity/internal/utilx"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package auth;
 
-option go_package = "github.com/G0tem/go-servise-entity/proto/auth";
+option go_package = "github.com/G0tem/go-service-entity/proto/auth";
 
 // AuthService предоставляет методы для работы с авторизацией
 service AuthService {

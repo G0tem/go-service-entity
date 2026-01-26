@@ -3,8 +3,8 @@ package factory
 import (
 	"sync"
 
-	"github.com/G0tem/go-servise-entity/internal/config"
-	"github.com/G0tem/go-servise-entity/internal/database"
+	"github.com/G0tem/go-service-entity/internal/config"
+	"github.com/G0tem/go-service-entity/internal/database"
 	"gorm.io/gorm"
 )
 

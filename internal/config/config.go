@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/G0tem/go-servise-entity/internal"
+	"github.com/G0tem/go-service-entity/internal"
 )
 
 type Config struct {

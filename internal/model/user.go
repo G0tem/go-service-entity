@@ -4,7 +4,7 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 
-	"github.com/G0tem/go-servise-entity/internal"
+	"github.com/G0tem/go-service-entity/internal"
 )
 
 // User struct (read only)

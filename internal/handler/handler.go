@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/G0tem/go-servise-entity/internal/config"
-	grpcClient "github.com/G0tem/go-servise-entity/internal/grpc"
+	"github.com/G0tem/go-service-entity/internal/config"
+	grpcClient "github.com/G0tem/go-service-entity/internal/grpc"
 	"github.com/gofiber/fiber/v2"
 	"github.com/rs/zerolog/log"
 
@@ -47,7 +47,10 @@ func (h *Handler) SetupRoutes(app *fiber.App) {
 
 	entity.Use(JWTMiddleware(cfg.SecretKey))
 
-	entity.Get("user_info", h.CheckUser)
-	entity.Post("create", h.CreateEntity)
 	entity.Get("test_grpc", h.TestGrpc)
+
+	entity.Get("get", h.GetEntity)
+	entity.Post("create", h.CreateEntity)
+	entity.Patch("update/:id", h.UpdateEntity)
+	entity.Delete("delete/:id", h.DeleteEntity)
 }

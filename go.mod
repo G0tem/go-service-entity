@@ -1,4 +1,4 @@
-module github.com/G0tem/go-servise-entity
+module github.com/G0tem/go-service-entity
 
 go 1.24.2
 

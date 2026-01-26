@@ -1,46 +1,59 @@
 package handler
 
 import (
-	"context"
-	"time"
-
-	"github.com/G0tem/go-servise-entity/internal/types"
+	"github.com/G0tem/go-service-entity/internal/model"
+	"github.com/G0tem/go-service-entity/internal/types"
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
 )
 
-// CheckUser godoc
-// @Summary Get user info
-// @Description Test endpoint
-// @Tags info
+// GetEntity godoc
+// @Summary GetEntity info
+// @Description Test endpoint crud
+// @Tags Entity
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Success 200 {array} types.GetMeResponse
+// @Success 200 {array} types.SuccessResponseData
 // @Failure 400 {object} types.FailureResponse
 // @Failure 500 {object} types.FailureErrorResponse
-// @Router /entity/user_info [get]
-func (h *Handler) CheckUser(c *fiber.Ctx) error {
+// @Router /entity/get [get]
+func (h *Handler) GetEntity(c *fiber.Ctx) error {
+	log.Info().Msg("Start GetEntity")
+
 	claims := c.Locals("claims").(*types.JwtClaims)
 	log.Debug().
 		Str("email", claims.Email).
-		Time("exp", claims.Exp).
+		Str("exp", claims.Exp.Format("3:04PM 2006-01-02")).
 		Msg("Attempting to get user")
 
-	return c.Status(fiber.StatusOK).JSON(types.GetMeResponse{
-		ID:    claims.UserID,
-		Email: claims.Email,
+	var result []model.Entity
+	if err := h.db.Where("user_id = ?", claims.UserID).Find(&result).Error; err != nil {
+		log.Error().Msg("Failed to query entities from database")
+		return c.Status(fiber.StatusInternalServerError).JSON(types.FailureErrorResponse{
+			Status:  "error",
+			Message: "Failed to query entities",
+			Error:   err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(types.SuccessResponseData{
+		Status:  "Success",
+		Message: "Entities retrieved successfully",
+		Data:    result,
 	})
 }
 
 // CreateEntity godoc
 // @Summary CreateEntity info
-// @Description Test endpoint
-// @Tags info
+// @Description Test endpoint crud
+// @Tags Entity
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Success 200 {array} types.GetMeResponse
+// @Param company body types.EntityRequest true "Entity data"
+// @Success 200 {array} types.SuccessResponseData
 // @Failure 400 {object} types.FailureResponse
 // @Failure 500 {object} types.FailureErrorResponse
 // @Router /entity/create [post]
@@ -50,64 +63,137 @@ func (h *Handler) CreateEntity(c *fiber.Ctx) error {
 	claims := c.Locals("claims").(*types.JwtClaims)
 	log.Debug().
 		Str("email", claims.Email).
-		Time("exp", claims.Exp).
+		Str("exp", claims.Exp.Format("3:04PM 2006-01-02")).
 		Msg("Attempting to get user")
 
-	return c.Status(fiber.StatusOK).JSON(types.GetMeResponse{
-		ID:    claims.UserID,
-		Email: claims.Email,
+	var req types.EntityRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(types.FailureResponse{
+			Status:  "error",
+			Message: "Invalid request body",
+		})
+	}
+
+	err := h.db.Create(&model.Entity{
+		UserID:      uuid.MustParse(claims.UserID),
+		Description: &req.Description,
+	}).Error
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to create entity in database")
+		return c.Status(fiber.StatusInternalServerError).JSON(types.FailureErrorResponse{
+			Status:  "error",
+			Message: "Failed to create entity",
+			Error:   err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(types.SuccessResponseData{
+		Status:  "Success",
+		Message: "Entity created successfully",
 	})
 }
 
-// TestGrpc godoc
-// @Summary Test gRPC connection to auth service
-// @Description Test endpoint for gRPC communication with auth service
-// @Tags grpc
+// UpdateEntity godoc
+// @Summary UpdateEntity info
+// @Description Test endpoint crud
+// @Tags Entity
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Success 200 {object} types.SuccessResponseData
+// @Param id path string true "Entity ID"
+// @Param company body types.EntityRequest true "Entity data"
+// @Success 200 {array} types.SuccessResponseData
 // @Failure 400 {object} types.FailureResponse
 // @Failure 500 {object} types.FailureErrorResponse
-// @Router /entity/test_grpc [get]
-func (h *Handler) TestGrpc(c *fiber.Ctx) error {
-	log.Info().Msg("Start TestGrpc endpoint")
+// @Router /entity/update/{id} [patch]
+func (h *Handler) UpdateEntity(c *fiber.Ctx) error {
+	log.Info().Msg("Start UpdateEntity")
 
-	if h.authClient == nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(types.FailureResponse{
-			Status:  "error",
-			Message: "gRPC client is not initialized",
-		})
-	}
+	claims := c.Locals("claims").(*types.JwtClaims)
+	log.Debug().
+		Str("email", claims.Email).
+		Str("exp", claims.Exp.Format("3:04PM 2006-01-02")).
+		Msg("Attempting to get user")
 
-	// Создаем контекст с таймаутом
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	// Вызываем gRPC метод GetTestData
-	testMessage := "Hello from entity service!"
-	response, err := h.authClient.GetTestData(ctx, testMessage)
+	entityIDStr := c.Params("id")
+	entityID, err := uuid.Parse(entityIDStr)
 	if err != nil {
-		log.Error().Err(err).Msg("Failed to call auth gRPC service")
-		return c.Status(fiber.StatusInternalServerError).JSON(types.FailureResponse{
+		return c.Status(fiber.StatusBadRequest).JSON(types.FailureResponse{
 			Status:  "error",
-			Message: "Failed to call auth service: " + err.Error(),
+			Message: "Invalid entity ID",
 		})
 	}
 
-	log.Info().
-		Str("message", response.Message).
-		Int32("status", response.Status).
-		Str("timestamp", response.Timestamp).
-		Msg("Successfully received response from auth gRPC service")
+	var req types.EntityRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(types.FailureResponse{
+			Status:  "error",
+			Message: "Invalid request body",
+		})
+	}
+
+	err = h.db.Model(&model.Entity{}).
+		Where("user_id = ? AND id = ?", claims.UserID, entityID).
+		Updates(model.Entity{
+			Description: &req.Description,
+		}).Error
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to update entity in database")
+		return c.Status(fiber.StatusInternalServerError).JSON(types.FailureErrorResponse{
+			Status:  "error",
+			Message: "Failed to update entity",
+			Error:   err.Error(),
+		})
+	}
 
 	return c.Status(fiber.StatusOK).JSON(types.SuccessResponseData{
-		Status:  "success",
-		Message: "gRPC call successful",
-		Data: map[string]interface{}{
-			"message":   response.Message,
-			"status":    response.Status,
-			"timestamp": response.Timestamp,
-		},
+		Status:  "Success",
+		Message: "Entities updated successfully",
+	})
+}
+
+// DeleteEntity godoc
+// @Summary DeleteEntity info
+// @Description Test endpoint crud
+// @Tags Entity
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param id path string true "Entity ID"
+// @Success 200 {array} types.SuccessResponseData
+// @Failure 400 {object} types.FailureResponse
+// @Failure 500 {object} types.FailureErrorResponse
+// @Router /entity/delete/{id} [delete]
+func (h *Handler) DeleteEntity(c *fiber.Ctx) error {
+	log.Info().Msg("Start DeleteEntity")
+
+	claims := c.Locals("claims").(*types.JwtClaims)
+	log.Debug().
+		Str("email", claims.Email).
+		Str("exp", claims.Exp.Format("3:04PM 2006-01-02")).
+		Msg("Attempting to get user")
+
+	entityIDStr := c.Params("id")
+	entityID, err := uuid.Parse(entityIDStr)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(types.FailureResponse{
+			Status:  "error",
+			Message: "Invalid entity ID",
+		})
+	}
+
+	err = h.db.Where("user_id = ? AND id = ?", claims.UserID, entityID).Delete(&model.Entity{}).Error
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to delete entities from database")
+		return c.Status(fiber.StatusInternalServerError).JSON(types.FailureErrorResponse{
+			Status:  "error",
+			Message: "Failed to delete entities",
+			Error:   err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(types.SuccessResponseData{
+		Status:  "Success",
+		Message: "Entities deleted successfully",
 	})
 }
