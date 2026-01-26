@@ -10,9 +10,9 @@ import (
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 
-	"github.com/G0tem/go-servise-entity/internal"
-	"github.com/G0tem/go-servise-entity/internal/config"
-	"github.com/G0tem/go-servise-entity/internal/model"
+	"github.com/G0tem/go-service-entity/internal"
+	"github.com/G0tem/go-service-entity/internal/config"
+	"github.com/G0tem/go-service-entity/internal/model"
 )
 
 // Connect function

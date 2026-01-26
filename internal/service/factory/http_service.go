@@ -7,9 +7,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/G0tem/go-servise-entity/internal/config"
-	"github.com/G0tem/go-servise-entity/internal/handler"
-	"github.com/G0tem/go-servise-entity/internal/router"
+	"github.com/G0tem/go-service-entity/internal/config"
+	"github.com/G0tem/go-service-entity/internal/handler"
+	"github.com/G0tem/go-service-entity/internal/router"
 	"github.com/gofiber/contrib/fiberzerolog"
 	"github.com/gofiber/contrib/swagger"
 	"github.com/gofiber/fiber/v2"

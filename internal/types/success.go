@@ -10,3 +10,7 @@ type SuccessResponseData struct {
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
 }
+
+type EntityRequest struct {
+	Description string `json:"description"`
+}

@@ -3,7 +3,7 @@ package tests
 import (
 	"testing"
 
-	"github.com/G0tem/go-servise-entity/internal/config"
+	"github.com/G0tem/go-service-entity/internal/config"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 

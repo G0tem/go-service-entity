@@ -3,7 +3,7 @@ package factory
 import (
 	"fmt"
 
-	"github.com/G0tem/go-servise-entity/internal/config"
+	"github.com/G0tem/go-service-entity/internal/config"
 	"gorm.io/gorm"
 )
 

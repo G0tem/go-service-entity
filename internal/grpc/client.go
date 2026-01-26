@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/G0tem/go-servise-entity/internal/config"
-	"github.com/G0tem/go-servise-entity/proto/auth"
+	"github.com/G0tem/go-service-entity/internal/config"
+	"github.com/G0tem/go-service-entity/proto/auth"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

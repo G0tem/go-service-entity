@@ -10,7 +10,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 
-	"github.com/G0tem/go-servise-entity/internal/model"
+	"github.com/G0tem/go-service-entity/internal/model"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/valyala/fasthttp"

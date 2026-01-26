@@ -9,9 +9,9 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
-	"github.com/G0tem/go-servise-entity/internal/config"
-	"github.com/G0tem/go-servise-entity/internal/queue"
-	"github.com/G0tem/go-servise-entity/internal/service/factory"
+	"github.com/G0tem/go-service-entity/internal/config"
+	"github.com/G0tem/go-service-entity/internal/queue"
+	"github.com/G0tem/go-service-entity/internal/service/factory"
 )
 
 // @title Local-Template-Entity Swagger
