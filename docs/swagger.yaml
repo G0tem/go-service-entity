@@ -129,7 +129,32 @@ paths:
       summary: GetEntity info
       tags:
       - Entity
-  /entity/test_grpc:
+  /entity/test-grpc:
+    get:
+      consumes:
+      - application/json
+      description: Test endpoint for gRPC communication with auth service
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.SuccessResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.FailureResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/types.FailureErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Test gRPC connection to auth service
+      tags:
+      - grpc
+  /entity/test-grpc-user-info:
     get:
       consumes:
       - application/json

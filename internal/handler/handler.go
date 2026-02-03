@@ -47,7 +47,8 @@ func (h *Handler) SetupRoutes(app *fiber.App) {
 
 	entity.Use(JWTMiddleware(cfg.SecretKey))
 
-	entity.Get("test_grpc", h.TestGrpc)
+	entity.Get("test-grpc", h.TestGrpc)
+	entity.Get("test-grpc-user-info", h.TestGetUserInfo)
 
 	entity.Get("get", h.GetEntity)
 	entity.Post("create", h.CreateEntity)

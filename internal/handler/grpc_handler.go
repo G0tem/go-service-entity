@@ -19,9 +19,9 @@ import (
 // @Success 200 {object} types.SuccessResponseData
 // @Failure 400 {object} types.FailureResponse
 // @Failure 500 {object} types.FailureErrorResponse
-// @Router /entity/test_grpc [get]
+// @Router /entity/test-grpc [get]
 func (h *Handler) TestGrpc(c *fiber.Ctx) error {
-	log.Info().Msg("Start TestGrpc endpoint")
+	log.Debug().Msg("Start TestGrpc endpoint")
 
 	if h.authClient == nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(types.FailureResponse{
@@ -58,6 +58,59 @@ func (h *Handler) TestGrpc(c *fiber.Ctx) error {
 			"message":   response.Message,
 			"status":    response.Status,
 			"timestamp": response.Timestamp,
+		},
+	})
+}
+
+// TestGetUserInfo godoc
+// @Summary Test gRPC connection to auth service
+// @Description Test endpoint for gRPC communication with auth service
+// @Tags grpc
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Success 200 {object} types.SuccessResponseData
+// @Failure 400 {object} types.FailureResponse
+// @Failure 500 {object} types.FailureErrorResponse
+// @Router /entity/test-grpc-user-info [get]
+func (h *Handler) TestGetUserInfo(c *fiber.Ctx) error {
+	log.Debug().Msg("Start TestGetUserInfo endpoint")
+
+	if h.authClient == nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(types.FailureResponse{
+			Status:  "error",
+			Message: "gRPC client is not initialized",
+		})
+	}
+
+	claims := c.Locals("claims").(*types.JwtClaims)
+	log.Debug().
+		Str("email", claims.Email).
+		Str("exp", claims.Exp.Format("3:04PM 2006-01-02")).
+		Msg("Attempting to get user")
+
+	// Создаем контекст с таймаутом
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// Вызываем gRPC метод GetTestData
+	response, err := h.authClient.GetUserInfo(ctx, claims.UserID)
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to call auth gRPC service")
+		return c.Status(fiber.StatusInternalServerError).JSON(types.FailureResponse{
+			Status:  "error",
+			Message: "Failed to call auth service: " + err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(types.SuccessResponseData{
+		Status:  "success",
+		Message: "gRPC call successful",
+		Data: map[string]interface{}{
+			"UserId":   response.UserId,
+			"Email":    response.Email,
+			"Username": response.Username,
+			"IsActive": response.IsActive,
 		},
 	})
 }
