@@ -54,4 +54,6 @@ func (h *Handler) SetupRoutes(app *fiber.App) {
 	entity.Post("create", h.CreateEntity)
 	entity.Patch("update/:id", h.UpdateEntity)
 	entity.Delete("delete/:id", h.DeleteEntity)
+
+	entity.Get("check", h.UserInfo)
 }

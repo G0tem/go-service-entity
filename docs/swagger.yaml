@@ -29,12 +29,56 @@ definitions:
       status:
         type: string
     type: object
+  types.SuccessResponseMe:
+    properties:
+      email:
+        type: string
+      exp:
+        type: string
+      permissions:
+        items:
+          type: string
+        type: array
+      role:
+        type: string
+      user_id:
+        type: string
+      username:
+        type: string
+    type: object
 info:
   contact: {}
   description: This is an API of payment-service for Socialweb application
   title: Local-Template-Entity Swagger
   version: "1.0"
 paths:
+  /entity/check:
+    get:
+      consumes:
+      - application/json
+      description: Test endpoint UserInfo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.SuccessResponseMe'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.FailureResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/types.FailureErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: UserInfo info
+      tags:
+      - Entity
   /entity/create:
     post:
       consumes:
