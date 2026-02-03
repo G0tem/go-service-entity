@@ -83,7 +83,7 @@ func (h *Handler) TestGetUserInfo(c *fiber.Ctx) error {
 		})
 	}
 
-	claims := c.Locals("claims").(*types.JwtClaims)
+	claims := c.Locals("claims").(*JwtClaims)
 	log.Debug().
 		Str("email", claims.Email).
 		Str("exp", claims.Exp.Format("3:04PM 2006-01-02")).

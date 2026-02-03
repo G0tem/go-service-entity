@@ -22,7 +22,7 @@ import (
 func (h *Handler) GetEntity(c *fiber.Ctx) error {
 	log.Info().Msg("Start GetEntity")
 
-	claims := c.Locals("claims").(*types.JwtClaims)
+	claims := c.Locals("claims").(*JwtClaims)
 	log.Debug().
 		Str("email", claims.Email).
 		Str("exp", claims.Exp.Format("3:04PM 2006-01-02")).
@@ -60,7 +60,7 @@ func (h *Handler) GetEntity(c *fiber.Ctx) error {
 func (h *Handler) CreateEntity(c *fiber.Ctx) error {
 	log.Info().Msg("Start CreateEntity")
 
-	claims := c.Locals("claims").(*types.JwtClaims)
+	claims := c.Locals("claims").(*JwtClaims)
 	log.Debug().
 		Str("email", claims.Email).
 		Str("exp", claims.Exp.Format("3:04PM 2006-01-02")).
@@ -109,7 +109,7 @@ func (h *Handler) CreateEntity(c *fiber.Ctx) error {
 func (h *Handler) UpdateEntity(c *fiber.Ctx) error {
 	log.Info().Msg("Start UpdateEntity")
 
-	claims := c.Locals("claims").(*types.JwtClaims)
+	claims := c.Locals("claims").(*JwtClaims)
 	log.Debug().
 		Str("email", claims.Email).
 		Str("exp", claims.Exp.Format("3:04PM 2006-01-02")).
@@ -167,7 +167,7 @@ func (h *Handler) UpdateEntity(c *fiber.Ctx) error {
 func (h *Handler) DeleteEntity(c *fiber.Ctx) error {
 	log.Info().Msg("Start DeleteEntity")
 
-	claims := c.Locals("claims").(*types.JwtClaims)
+	claims := c.Locals("claims").(*JwtClaims)
 	log.Debug().
 		Str("email", claims.Email).
 		Str("exp", claims.Exp.Format("3:04PM 2006-01-02")).
