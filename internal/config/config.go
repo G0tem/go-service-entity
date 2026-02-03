@@ -38,7 +38,6 @@ type Config struct {
 }
 
 func LoadConfig() Config {
-
 	logLevel, _ := strconv.Atoi(os.Getenv("LOG_LEVEL"))
 
 	return Config{
