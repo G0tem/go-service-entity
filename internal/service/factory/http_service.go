@@ -19,10 +19,22 @@ import (
 )
 
 func httpService(cfg *config.Config) error {
-	db, err := NewDBService(cfg)
+	db, err := NewPostgres(cfg)
 	if err != nil {
 		return err
 	}
+
+	mongo, err := NewMongo(cfg)
+	if err != nil {
+		return err
+	}
+
+	rds, err := NewRedis(cfg)
+	if err != nil {
+		return err
+	}
+
+	handlers := handler.NewHandler(db, mongo, rds, cfg)
 
 	app := fiber.New(fiber.Config{})
 
@@ -40,10 +52,6 @@ func httpService(cfg *config.Config) error {
 		Logger: &logger,
 	}))
 	app.Use(cors.New())
-
-	handlers := handler.NewHandler(db, cfg)
-
-	// startWebSocketClient(cfg, db)
 
 	router.SetupRoutes(app)
 	handlers.SetupRoutes(app)

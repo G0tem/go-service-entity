@@ -34,7 +34,9 @@ type Config struct {
 	PostgresMaxOpenConns    int           `default:"100" envconfig:"POSTGRES_MAX_OPEN_CONNS"`
 	PostgresConnMaxLifetime time.Duration `default:"1h" envconfig:"POSTGRES_CONN_MAX_LIFETIME"`
 
-	// RedisAddr string `binding:"required" envconfig:"REDIS_ADDR"`
+	RedisUrl string `binding:"required" envconfig:"REDIS_URL"`
+
+	MangoURL string `binding:"required" envconfig:"MONGODB_URL"`
 }
 
 func LoadConfig() Config {
@@ -65,7 +67,9 @@ func LoadConfig() Config {
 		PostgresMaxOpenConns:    internal.ParseInt(os.Getenv("POSTGRES_MAX_OPEN_CONNS"), 100),
 		PostgresConnMaxLifetime: internal.ParseDuration(os.Getenv("POSTGRES_CONN_MAX_LIFETIME"), 1*time.Hour),
 
-		// RedisAddr: os.Getenv("REDIS_ADDR"),
+		RedisUrl: os.Getenv("REDIS_URL"),
+
+		MangoURL: os.Getenv("MONGODB_URL"),
 	}
 }
 
