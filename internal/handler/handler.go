@@ -7,12 +7,23 @@ import (
 	"github.com/G0tem/go-service-entity/internal/config"
 	grpcClient "github.com/G0tem/go-service-entity/internal/grpc"
 	"github.com/gofiber/fiber/v2"
+	"github.com/redis/go-redis/v9"
 	"github.com/rs/zerolog/log"
+	"go.mongodb.org/mongo-driver/mongo"
 
 	"gorm.io/gorm"
 )
 
-func NewHandler(db *gorm.DB, cfg *config.Config) *Handler {
+type Handler struct {
+	db         *gorm.DB
+	mongo      *mongo.Client
+	rds        *redis.Client
+	cfg        *config.Config
+	authClient *grpcClient.AuthClient
+	client     *http.Client
+}
+
+func NewHandler(db *gorm.DB, mongo *mongo.Client, rds *redis.Client, cfg *config.Config) *Handler {
 	// Инициализируем gRPC клиент
 	authClient, err := grpcClient.NewAuthClient(cfg)
 	if err != nil {
@@ -22,19 +33,14 @@ func NewHandler(db *gorm.DB, cfg *config.Config) *Handler {
 
 	return &Handler{
 		db:         db,
+		mongo:      mongo,
+		rds:        rds,
 		cfg:        cfg,
 		authClient: authClient,
 		client: &http.Client{
 			Timeout: 30 * time.Second,
 		},
 	}
-}
-
-type Handler struct {
-	db         *gorm.DB
-	cfg        *config.Config
-	authClient *grpcClient.AuthClient
-	client     *http.Client
 }
 
 func (h *Handler) SetupRoutes(app *fiber.App) {
