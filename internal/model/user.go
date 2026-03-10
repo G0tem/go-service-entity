@@ -3,8 +3,6 @@ package model
 import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
-
-	"github.com/G0tem/go-service-entity/internal"
 )
 
 // User struct (read only)
@@ -27,18 +25,4 @@ func (user *User) BeforeCreate(tx *gorm.DB) error {
 	user.ID = uuid.New()
 
 	return nil
-}
-
-func (user *User) GetAvatarUrl(cdnUrl string) string {
-	if user.AvatarURL == "" {
-		return ""
-	}
-	return internal.JoinUrl(cdnUrl, user.AvatarURL)
-}
-
-func (user *User) GetCoverUrl(cdnUrl string) string {
-	if user.CoverURL == "" {
-		return ""
-	}
-	return internal.JoinUrl(cdnUrl, user.CoverURL)
 }
