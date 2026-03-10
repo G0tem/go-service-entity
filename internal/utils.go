@@ -3,7 +3,6 @@ package internal
 import (
 	"context"
 	"fmt"
-	"net/url"
 	"os"
 	"regexp"
 	"strconv"
@@ -152,14 +151,6 @@ func ParseDuration(duration string, defaultValue time.Duration) time.Duration {
 		result += d
 	}
 
-	return result
-}
-
-func JoinUrl(base string, parts ...string) string {
-	result, err := url.JoinPath(base, parts...)
-	if err != nil {
-		return base
-	}
 	return result
 }
 

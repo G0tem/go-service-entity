@@ -27,11 +27,10 @@ func (h *Handler) UserInfo(c *fiber.Ctx) error {
 		Msg("Attempting to get user")
 
 	return c.Status(fiber.StatusOK).JSON(types.SuccessResponseMe{
-		UserID:      claims.UserID,
-		Username:    claims.Username,
-		Email:       claims.Email,
-		Role:        claims.Role,
-		Permissions: claims.Permissions,
-		Exp:         claims.Exp,
+		UserID:   claims.UserID,
+		Username: claims.Username,
+		Email:    claims.Email,
+		Role:     claims.Role,
+		Exp:      claims.Exp,
 	})
 }

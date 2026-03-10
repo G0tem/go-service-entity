@@ -11,12 +11,11 @@ import (
 // JwtClaims represents minimal set of fields extracted from JWT token
 // and propagated through Fiber context.
 type JwtClaims struct {
-	UserID      string    `json:"user_id"`
-	Username    string    `json:"username"`
-	Email       string    `json:"email"`
-	Role        string    `json:"role"`
-	Permissions []string  `json:"permissions"`
-	Exp         time.Time `json:"exp"`
+	UserID   string    `json:"user_id"`
+	Username string    `json:"username"`
+	Email    string    `json:"email"`
+	Role     string    `json:"role"`
+	Exp      time.Time `json:"exp"`
 }
 
 // JWTMiddleware validates Authorization: Bearer <token>, parses claims,
@@ -66,12 +65,11 @@ func JWTMiddleware(secret string) fiber.Handler {
 		}
 
 		claims := &JwtClaims{
-			UserID:      asString(claimsMap["user_id"]),
-			Username:    asString(claimsMap["username"]),
-			Email:       asString(claimsMap["email"]),
-			Role:        asString(claimsMap["role"]),
-			Permissions: asStringSlice(claimsMap["permissions"]),
-			Exp:         expTime,
+			UserID:   asString(claimsMap["user_id"]),
+			Username: asString(claimsMap["username"]),
+			Email:    asString(claimsMap["email"]),
+			Role:     asString(claimsMap["role"]),
+			Exp:      expTime,
 		}
 
 		c.Locals("claims", claims)
@@ -85,23 +83,4 @@ func asString(v any) string {
 	}
 	s, _ := v.(string)
 	return s
-}
-
-func asStringSlice(v any) []string {
-	if v == nil {
-		return nil
-	}
-	if list, ok := v.([]string); ok {
-		return list
-	}
-	if list, ok := v.([]any); ok {
-		result := make([]string, 0, len(list))
-		for _, it := range list {
-			if s, ok := it.(string); ok {
-				result = append(result, s)
-			}
-		}
-		return result
-	}
-	return nil
 }

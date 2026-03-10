@@ -10,7 +10,7 @@ import (
 
 type Config struct {
 	LogLevel  int    `default:"4" envconfig:"LOG_LEVEL"`
-	HttpPort  uint16 `default:"8007" envconfig:"HTTP_PORT"`
+	HttpPort  uint16 `default:"8010" envconfig:"HTTP_PORT"`
 	SecretKey string `binding:"required" envconfig:"SECRET_KEY"`
 
 	AuthGrpcAddress string `default:"localhost:50051" envconfig:"AUTH_GRPC_ADDRESS"`
@@ -71,12 +71,4 @@ func LoadConfig() Config {
 
 		MangoURL: os.Getenv("MONGODB_URL"),
 	}
-}
-
-func GetenvDef(envVariable string, defaultValue string) string {
-	result := os.Getenv(envVariable)
-	if result != "" {
-		return result
-	}
-	return defaultValue
 }
